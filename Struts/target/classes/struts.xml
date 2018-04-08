@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+
+	<!-- 配置action的后缀 -->
+	<constant name="struts.action.extension" value="action,do,,"></constant>
+	<!-- 配置动态方法调用 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="true"></constant>
+	<constant name="struts.custom.i18n.resources" value="message" /><!-- 配置全局国际化资源文件的baseName -->
+	<constant name="struts.multipart.saveDir" value="/upload" />
+	<constant name="struts.multipart.maxSize" value="104857600" />
+
+	<package name="my-struts" extends="json-default">
+		<interceptors>
+			<interceptor name="MyIntercepter" class="com.gs.intercepter.MyIntercepter" />
+			<interceptor name="MyIntercepter1" class="com.gs.intercepter.MyIntercepter1" />
+
+			<!-- 自定义拦截器栈 -->
+			<interceptor-stack name="my-stack">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="MyIntercepter" />
+			</interceptor-stack>
+
+		</interceptors>
+		<!--
+		<default-interceptor-ref name="my-stack" />
+		-->
+		<global-results>
+			<result name="myerror">/error.jsp</result>
+			<result name="sqlerror">/sql_error.jsp</result>
+		</global-results>
+
+		<global-exception-mappings>
+			<exception-mapping exception="java.sql.SQLException" result="sqlerror"></exception-mapping>
+			<exception-mapping exception="java.lang.Exception" result="myerror"></exception-mapping>
+		</global-exception-mappings>
+	</package>
+
+	<package name="default" extends="struts-default">
+		<default-action-ref name="notFound" />
+		<action name="notFound">
+			<result>/404.jsp</result>
+		</action>
+	</package>
+	<include file="struts-*.xml" />
+</struts>

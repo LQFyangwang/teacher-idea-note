@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="u-package" namespace="/u" extends="my-struts">
+		<action name="*" class="com.gs.controller.UserAction1" method="{1}">
+			<result name="regPage">/reg.jsp</result>
+			<result name="reg">/home.jsp</result>
+		</action>
+	</package>
+</struts>

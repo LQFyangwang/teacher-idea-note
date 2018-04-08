@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/d_hibernate?useUnicode=true&amp;characterEncoding=utf8</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">123456</property>
+        <!-- 数据库方言 -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <!-- 在控制台打印由Hibernate自动生成的sql语句 -->
+        <property name="show_sql">true</property>
+        <!-- Hibernate自动根据hbm配置文件去更新数据库结构 -->
+        <!--
+        <property name="hbm2ddl.auto">update</property>
+        -->
+
+        <mapping resource="com/gs/bean/User.hbm.xml"/>
+        <mapping resource="com/gs/bean/UserDetail.hbm.xml" />
+        <mapping resource="com/gs/bean/Product.hbm.xml"/>
+        <mapping resource="com/gs/bean/Dept.hbm.xml"/>
+        <mapping resource="com/gs/bean/Emp.hbm.xml"/>
+        <mapping resource="com/gs/bean/Stu.hbm.xml"/>
+        <mapping resource="com/gs/bean/Teacher.hbm.xml"/>
+        <mapping resource="com/gs/bean/Class.hbm.xml" />
+
+    </session-factory>
+</hibernate-configuration>

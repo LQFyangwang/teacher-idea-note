@@ -1,0 +1,276 @@
+1、ORM(Object-Relational-Mapping) 对象关系映射
+    t_user
+    id name gender birthday
+
+    User
+    id
+    name
+    gender
+    birthday
+
+    t_user
+    id name gender birthday
+
+    t_user_detail
+    id address phone contact
+
+    User
+    id
+    name
+    gender
+    birthday
+    UserDetail
+
+    UserDetail
+    id
+    address
+    phone
+    contact
+
+    t_user
+    id name gender birthday
+
+    t_order
+    id order_time user_id
+
+    User
+    id
+    name
+    gender
+    birthday
+    List<Order> orders
+
+    Order
+    id
+    orderTime
+    userId
+
+2、什么是Hibernate？
+    Hibernate是一个开源的数据库持久层工具,是ORM的一种技术实现，对JDBC进行了封装，能够简化DAO的编写，可以不使用SQL语句完成数据的增删改查，事务管理
+    Hibernate可以与Spring整合在一起
+    MyBatis与Hibernate几乎一致
+
+    原始的dao查询出的数据需要手动封装到JavaBean
+    把行数据转对象
+
+    不需要手动把行数据封装到JavaBean，由Hibernate自动完成
+    表与表之间的关联关系直接转化成对象与对象的关联关系
+
+    持久化：
+    把数据从内存中永久存储到硬盘的过程H
+
+    JBoss公司的产品
+
+3、JPA
+    Java Persistence API    Java持久化API接口  （JaveEE组织提出的一个数据持久化规范）
+
+4、SessionFactory
+    用于创建数据库连接session的工厂类
+
+5、Session
+    数据库连接：connection, hiernate里数据库连接称为session
+
+6、Hibernate Java项目的创建及运行流程
+    1）导入Jar包（推荐使用Maven）
+        直接参考下载的hibernate的lib目录下的required目录
+    2）创建数据库及数据表
+    3）在src根目录下（maven请在resoucres目录下）创建hibernate.cfg.xml文件
+        文件的作用：
+            配置SessionFactory的参数，数据库连接的参数，是否显示 sql语句，映射文件的路径
+    4）编写与数据表对应的JavaBean实体类
+    5）在JavaBean实体类同一个包中创建实体类的映射文件，映射文件的名字类名.hbm.xml
+        此映射文件用于声明哪张表与哪个类对象映射，表里的字段与类对象的哪些属性映射
+        请参考User.hbm.xml文件
+    6）编写 Java类，此类用于获取SessionFactory，再通过SessionFactory获取数据库连接Session对象
+    7）获取到Session连接后可直接使用session对象对数据库进行CRUD操作
+
+7、Hibernate的延迟加载问题
+    session.get(); // 非延迟加载，立即查询出来
+    get方法去查询一个不存在的对象，返回null
+
+    session.load(); // 只有当使用到查询出的对象时，此sql语句才会真正地执行。可以提升数据库的查询性能
+    如果使用了延迟加载技术，则session也得延迟关闭
+    load方法查询一个不存在的对象，则抛出异常org.hibernate.ObjectNotFoundException
+
+8、Hibernate一级缓存
+    当使用load,get, save, saveOrUpdate方法时，Hibernate会使用一级缓存，一级缓存实际就是
+    内存中的一块区域，把直接查询出的对象先储存到缓存中，如果下次查询同样一个对象，则不需要执行Sql语句，
+    而是直接从缓存中拿数据
+
+9、get()load()用于查询对象
+    save()用于保存对象
+    update()用于更新对象
+    delete()用于删除对象
+    saveOrUpdate()保存或更新对象
+
+10、SQL, HQL
+    Structured Query Language
+    Hibernate Query Language,由Hibernate创建基于对象的数据查询语言
+    from Product p where p.id = ?
+    Product是类的简单类名，p是简单类别的别名，p.id,id是类里的属性
+    select * from t_product p where p.id = ?
+
+    Query query = session.createQuery(String hql); // 获取Query查询对象
+    List<T> results = query.list(); // 返回hql对应的结果集
+
+    HQL不可应用于插入操作，但可应用于查询，更新，删除操作
+    在项目当中，HQL多用于做查询操作，很少使用HQL进行更新及删除操作
+
+11、使用Hibernate执行原生的SQL语句
+    session.createSQLQuery(String sql); // 被弃用的方法，参数索引从0开始
+    session.createNativeQuery(String sql); // 现在推荐使用的方法，参数索引从1开始，与JDBC一致
+
+12、Hibernate事务
+    1)save()不需要手动开启事务
+    2）update,delete需要手动开启事务
+    3）如果使用原生sql，则插入，更新，删除，都需要开启事务
+
+    Transaction transaction = session.beginTransaction()开启事务
+
+    transaction.commit(); // 提交事务
+
+13、Hibernate关系映射
+    1）一对一   one-to-one
+        一个用户拥有一个详情，一个详情只属于一个用户
+        t_user==>User
+        id name gender
+
+        t_user_detail==>UserDetail
+
+        User {
+            private UserDetail userDetail;
+        }
+
+        一个User对象关联到一个UserDetail对象
+        one-to-one
+        第一个one:User对象
+        第二个one:UserDetail对象
+
+        UserDetail {
+            private User user;
+        }
+        一个UserDetail对象关联到一个User对象
+        one-to-one
+        第一个one:UserDetail对象
+        第二个one:User对象
+
+        User和UserDetail都需要提供对象映射文件
+        User对应于主键表
+            <id name="" column="">
+                <generator name="native" />
+            </id>
+
+        UserDetail对应于外键表
+            <id name="" column="">
+                <generator name="foreign">
+                    <param name="property">主键字段表所对应的JavaBean</param>
+                </generator>
+            </id>
+
+        分别在对象映射文件中加入关系映射
+        User.hbm.xml， UserDetail.hbm.xml
+        <one-to-one name="另外一方对应的属性" class="另外一方对应的属性的全限定类名"></one-to-one>
+
+        一对一保存：
+            通常只需要在保存主键对象时保存外键对象.
+            在映射文件中配置cascade="save-update"
+            对象内部的属性双方都配置设置
+
+        一对一更新：
+            通常只需要在更新主键对象时更新外键对象
+            在映射文件中配置cascade="save-update"
+            对象内部的属性双方都配置设置
+            外键对象需要指明id
+
+        一对一删除：
+            删除主键对象，则可以级联删除外键对象
+            数据库表设计中，外键需要设置成删除时，更新时支持级联操作cascade
+            在映射文件中配置cascade="delete|all"
+
+
+    2）一对多和多对一   one-to-many   many-to-one
+        一个部门拥有多个员工，一个员工属于一个部门
+        Dept
+            Set<Emp> emps;
+
+            <set name="多方所对应的属性 emps" lazy="true（默认为true，懒加载，多方数据使用到的时候才需要查询数据库）" cascade="all">
+                <key column="外键字段"></key>
+                <one-to-many class="多方对应的全限定类类名"></one-to-many>
+            </set>
+
+        Emp
+            Dept dept;
+
+            <many-to-one name="一方对应的属性名" class="一方对应的全限定类名" column="外键字段"></many-to-one>
+
+        <set lazy="true" inverse="false">
+            // inverse表示关联关系的控制权交给哪一方
+            如果为false，则表示关联关系的控制权交给一方
+            则在添加一方数据的时候，如果需要级联保存多方的数据，此时的多方对象不需要设置一方的对象
+            即不需要这句话emp.setDept(dept);
+            外键字段的值会自动从dept中获取
+
+            如果为true，则表示关联关系的控制权交给多方
+            则在添加一方数据时，如果需要级联保存多方的数据，此时的多方对象一定需要设置一方对象，
+            必须加这名话emp.setDept(dept);
+            外键字段的值不会从dept中获取，所以加上的这句话是为了手动给外键字段设置值
+        </set>
+
+    3）多对多   many-to-many
+        一个订单可以有多个商品，一个商品可以属于多个订单
+        需要增加第三张关联关系表
+                <!-- table用于描述哪张表是关联关系表 -->
+                <set name="teachers" table="t_stu_tea">
+                    <!-- 关联关系表中的哪个字段与当前映射文件中对应的对象关联 -->
+                    <key column="stu_id"></key>
+                    <!-- 关联关系表中的哪个字段与另外一方对象关联 -->
+                    <many-to-many column="tea_id" class="com.gs.bean.Teacher"></many-to-many>
+                </set>
+
+        多对多关系，尽量不要去做级联操作
+
+14、抓取策略
+    <one-to-one fetch="">
+    <set fetch="">
+
+    </set>
+    <many-to-many fetch="">
+    fetch抓取策略：默认为select,分成多条select语句
+        join:不会分成多条select语句，而是使用关联查询语句join
+
+15、Hibernate HQL的参数设置方法
+    1）使用？的形式
+        Query query = session.createQuery("from Dept where id = ?");
+        query.setParameter("0", 1);
+    2)使用参数名的形式
+        Query query = session.createQuery("from Dept where id = :id and name = :n");
+        query.setParameter("id", 1); // 第一个参数与hql里：后面的保持一致
+        query.setParameter("n", "test");
+
+16、Hibernate对象的状态
+    1）瞬时态
+    2）持久态
+    3）游离态
+    状态的变化请参考Hibernate对象状态的转变.jpg图片
+
+补充：
+    JavaBean
+        Java的技术规范
+    Model
+        模型
+        JavaBean，在JavaBean中添加一些其他的方法
+    Entity
+        实体
+        一个数据表对应于一个实体
+    POJO
+        Plain Old Java Object
+        在数据化持久层代码中操作的JavaBean
+    VO
+        Value Object
+        值对象
+        Controller与页面间交互的JavaBean
+    DTO
+        Data Transfer Object
+        数据传输对象
+        Controller->Service->DAO
+

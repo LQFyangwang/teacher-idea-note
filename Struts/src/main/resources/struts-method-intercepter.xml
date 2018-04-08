@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="mintercepter" namespace="/mintercepter" extends="my-struts">
+
+		<interceptors>
+			<interceptor name="in" class="com.gs.intercepter.MyMethodInterceptor" />
+		</interceptors>
+
+		<action name="*" class="com.gs.controller.MethodInterceptorAction" method="{1}">
+			<interceptor-ref name="in">
+				<!-- 需要被 拦截的方法 -->
+				<param name="includeMethods">plus,hello</param>
+				<!-- 不需要被 拦截的方法 -->
+				<param name="excludeMethods">add</param>
+			</interceptor-ref>
+			<result name="add">/home.jsp</result>
+			<result name="plus">/home.jsp</result>
+			<result name="hello">/home.jsp</result>
+		</action>
+	</package>
+</struts>

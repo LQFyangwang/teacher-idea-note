@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.gs.bean">
+
+    <class name="User" table="t_user">
+        <!-- 用于描述 主键字段 -->
+        <id name="id" column="id">
+            <!-- 主键的生成策略,native表示使用数据库自身的主键生成方法，uuid表示hibernate生成一个
+             uuid作为主键，uuid会把四个横杆去掉 -->
+            <generator class="native"/>
+        </id>
+        <property name="name" column="name" />
+        <property name="pwd" column="pwd" />
+        <property name="gender" column="gender" />
+
+        <!-- 级联操作：
+         none默认：无级联操作
+         save-update:级联保存和级联更新
+         delete:级联删除
+         all：级联保存，更新，删除
+         -->
+        <one-to-one name="userDetail" cascade="all"></one-to-one>
+
+    </class>
+
+</hibernate-mapping>

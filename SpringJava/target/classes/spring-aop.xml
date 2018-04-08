@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="userTest" class="com.gs.aop.UserTest" />
+
+    <bean id="beforeSave" class="com.gs.aop.BeforeSave" />
+
+    <bean id="afterSave" class="com.gs.aop.AfterSave" />
+
+    <bean id="throwSave" class="com.gs.aop.ThrowingSave" />
+
+    <bean id="aroundSave" class="com.gs.aop.AroundSave" />
+
+    <!--
+     1）表示任意公开方法
+     	execution(public * *(..))
+     2）任何一个"set"前缀开头的方法
+     	execution(* set*(..))
+     3)某个接口中的所有方法
+     	execution(* com.gs.service.TestService.*(..))
+     4)某个包中的类和该 包中的子包里的任意类
+     	execution(* com.gs.service..*.*(..))
+     5)某个包中的类和子包中的指定的类
+     	execution(* com.gs.service..TestService.*(..)
+
+     	修饰符 包 子包 类 方法
+
+      -->
+    <aop:config>
+        <!--配置切入点， 把某个方法的执行前，执行后，抛出异常都配置成切入点-->
+        <aop:pointcut id="saveUser" expression="execution(* com.gs.aop.UserTest.*(..))"></aop:pointcut>
+        <aop:advisor advice-ref="beforeSave" pointcut-ref="saveUser" />
+        <aop:advisor advice-ref="afterSave" pointcut-ref="saveUser" />
+        <aop:advisor advice-ref="throwSave" pointcut-ref="saveUser" />
+        <aop:advisor advice-ref="aroundSave" pointcut-ref="saveUser" />
+    </aop:config>
+
+</beans>

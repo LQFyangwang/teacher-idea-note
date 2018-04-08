@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="customer" class="com.gs.bean.Customer">
+        <!--setter方法注入-->
+        <property name="id" value="2"></property>
+        <property name="name" value="customer2"></property>
+        <!--
+        <property name="books" value="book1,book2"></property>
+        -->
+        <property name="books">
+            <array>
+                <value>book1</value>
+                <value>book2</value>
+                <value>book3</value>
+            </array>
+        </property>
+        <property name="hobbies">
+            <list>
+                <value>hobby1</value>
+                <value>hobby2</value>
+                <value>hobby3</value>
+            </list>
+        </property>
+        <property name="values">
+            <map>
+                <entry key="key1" value="value1"></entry>
+                <entry key="key2" value="value2"></entry>
+            </map>
+        </property>
+
+        <property name="props">
+            <props>
+                <prop key="key1">
+                    value1
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="customer1" class="com.gs.bean.Customer">
+        <!--构造方法注入-->
+        <!--
+        <constructor-arg name="id" value="3"></constructor-arg>
+        <constructor-arg name="name" value="customer3"></constructor-arg>
+        -->
+        <constructor-arg index="0" value="3"></constructor-arg>
+        <constructor-arg index="1" value="customer3"></constructor-arg>
+        <constructor-arg index="2" value="book1,book2"></constructor-arg>
+    </bean>
+
+    <bean id="product" class="com.gs.bean.Product"></bean>
+
+    <bean id="testDAO" class="com.gs.daotest.TestDAO"></bean>
+
+    <!-- ref表示引用配置的另外一个bean组件，用bean组件的id来描述,spring自动被引用的bean注入到实例中 -->
+    <!--
+    <bean id="testService" class="com.gs.servicetesttest.TestService">
+        <property name="testDAO" ref="testDAO"></property>
+    </bean>
+    -->
+
+    <!-- 根据名字自动注入，类里的属性如果与bean组件的id一样，则自动注入    autowire="byName" -->
+
+    <bean id="testService" class="com.gs.servicetest.TestService" autowire="byName"></bean>
+
+    <!--
+    <bean id="testService" class="com.gs.servicetesttest.TestService" autowire="byType"></bean>
+    -->
+
+</beans>

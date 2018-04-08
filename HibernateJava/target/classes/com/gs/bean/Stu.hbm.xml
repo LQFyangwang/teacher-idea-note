@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.gs.bean">
+
+    <class name="Stu" table="t_stu">
+        <id name="id" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="name" column="name" />
+        <property name="age" column="age" />
+        <property name="gender" column="gender" />
+
+        <many-to-one name="clazz" column="class_id" class="com.gs.bean.Class"></many-to-one>
+
+        <!-- table用于描述哪张表是关联关系表 -->
+        <set name="teachers" table="t_stu_tea">
+            <!-- 关联关系表中的哪个字段与当前映射文件中对应的对象关联 -->
+            <key column="stu_id"></key>
+            <!-- 关联关系表中的哪个字段与另外一方对象关联 -->
+            <many-to-many column="tea_id" class="com.gs.bean.Teacher"></many-to-many>
+        </set>
+
+    </class>
+
+    <query name="queryById">
+        from Stu where id = :id
+    </query>
+
+</hibernate-mapping>

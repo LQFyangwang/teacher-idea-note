@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="index-struts" namespace="/" extends="my-struts">
+		<action name="index" class="com.gs.controller.IndexAction">
+			<result name="success" type="redirectAction">hello</result>
+		</action>
+
+		<action name="hello" class="com.gs.controller.HelloAction">
+			<result name="success">/hello.jsp</result>
+			<result name="add">/index.jsp</result>
+			<result name="plus">/hello.jsp</result>
+			<result name="fail">/error.jsp</result>
+		</action>
+	</package>
+
+	<package name="pack" namespace="/a" extends="my-struts">
+		<action name="index" class="com.gs.controller.IndexAction1">
+			<result name="success">/index.jsp</result>
+		</action>
+	</package>
+</struts>

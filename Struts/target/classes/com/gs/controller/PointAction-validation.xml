@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE validators PUBLIC
+        "-//Apache Struts//XWork Validator 1.0.3//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+
+<validators>
+
+    <!-- 对action中的属性a进行验证 -->
+    <field name="a">
+        <field-validator type="requiredstring">
+            <message>a不能为空</message>
+        </field-validator>
+        
+        <field-validator type="int">
+            <message>a只能是整数</message>
+        </field-validator>
+
+    </field>
+
+    <!-- 验证密码-->
+    <field name="pwd">
+        <field-validator type="requiredstring">
+            <message>密码不能为空</message>
+        </field-validator>
+        <field-validator type="stringlength">
+            <param name="minLength">6</param>
+            <message>密码至少${minLength}位</message>
+        </field-validator>
+    </field>
+
+    <!-- 确认密码 -->
+    <field name="conPwd">
+        <field-validator type="fieldexpression">
+            <param name="expression">conPwd==pwd</param>
+            <message>密码和确认密码必须一致</message>
+        </field-validator>
+    </field>
+
+    <field name="phone">
+        <field-validator type="regex">
+            <!-- 0797-8888888 -->
+            <param name="regex">^(\d{3,4}-){0,1}(\d{7,8})$</param>
+            <message>电话号码格式不正确</message>
+        </field-validator>
+    </field>
+</validators>
